@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FlashCardApi.Models;
@@ -20,39 +18,41 @@ namespace FlashCardApi.Controllers
             _context = context;
         }
 
-        // GET: api/FlashCards
+        // GET: api/cards
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Card>>> GetFlashCards()
+        public async Task<ActionResult<IEnumerable<Card>>> GetCards()
         {
-            return await _context.FlashCards.ToListAsync();
+            //return await _context.Cards.Include(c => c.Booklet).ToListAsync();
+            return await _context.Cards.ToListAsync();
         }
 
-        // GET: api/FlashCards/5
+        // GET: api/cards/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Card>> GetFlashCard(long id)
+        public async Task<ActionResult<Card>> GetCard(long id)
         {
-            var flashCard = await _context.FlashCards.FindAsync(id);
+            //var card = await _context.Cards.Include(c => c.Booklet).FirstOrDefaultAsync(b => b.BookletId == id);
+            var card = await _context.Cards.FindAsync(id);
 
-            if (flashCard == null)
+            if (card == null)
             {
                 return NotFound();
             }
 
-            return flashCard;
+            return card;
         }
 
-        // PUT: api/FlashCards/5
+        // PUT: api/cards/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFlashCard(long id, Card flashCard)
+        public async Task<IActionResult> PutCard(long id, Card card)
         {
-            if (id != flashCard.Id)
+            if (id != card.CardId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(flashCard).State = EntityState.Modified;
+            _context.Entry(card).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace FlashCardApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!FlashCardExists(id))
+                if (!CardExists(id))
                 {
                     return NotFound();
                 }
@@ -73,37 +73,34 @@ namespace FlashCardApi.Controllers
             return NoContent();
         }
 
-        // POST: api/FlashCards
+        // POST: api/cards
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Card>> PostFlashCard(Card flashCard)
+        public async Task<ActionResult<Card>> PostCard(Card card)
         {
-            _context.FlashCards.Add(flashCard);
+            _context.Cards.Add(card);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetFlashCard), new { id = flashCard.Id }, flashCard);
+            return CreatedAtAction(nameof(GetCard), new { id = card.CardId }, card);
         }
 
-        // DELETE: api/FlashCards/5
+        // DELETE: api/cards/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Card>> DeleteFlashCard(long id)
+        public async Task<ActionResult<Card>> DeleteCard(long id)
         {
-            var flashCard = await _context.FlashCards.FindAsync(id);
-            if (flashCard == null)
+            var card = await _context.Cards.FindAsync(id);
+            if (card == null)
             {
                 return NotFound();
             }
 
-            _context.FlashCards.Remove(flashCard);
+            _context.Cards.Remove(card);
             await _context.SaveChangesAsync();
 
-            return flashCard;
+            return card;
         }
 
-        private bool FlashCardExists(long id)
-        {
-            return _context.FlashCards.Any(e => e.Id == id);
-        }
+        private bool CardExists(long id) => _context.Cards.Any(e => e.CardId == id);
     }
 }

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace FlashCardApi.Models
 {
     public class Card
     {
-        public long Id { get; set; }
+        public long CardId { get; set; }
 
         [Required]
         public int? Rating { get; set; }
@@ -24,5 +25,8 @@ namespace FlashCardApi.Models
 
         [Required]
         public long? BookletId { get; set; }
+
+        [JsonIgnore]
+        public Booklet Booklet { get; set; }
     }
 }
