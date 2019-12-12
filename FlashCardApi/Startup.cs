@@ -23,6 +23,7 @@ namespace FlashCardApi
             services.AddControllers().AddJsonOptions(options =>
             {
                 var settings = options.JsonSerializerOptions;
+                settings.IgnoreNullValues = true;
                 settings.Converters.Add(new DateFormatConverter());
             });
 

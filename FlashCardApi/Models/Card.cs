@@ -6,6 +6,7 @@ namespace FlashCardApi.Models
 {
     public class Card
     {
+        [Required]
         public long CardId { get; set; }
 
         [Required]
@@ -24,7 +25,7 @@ namespace FlashCardApi.Models
         public DateTime? CreatedAt { get; set; }
 
         [Required]
-        public long? BookletId { get; set; }
+        public long BookletId { get; set; }
 
         [JsonIgnore]
         public Booklet Booklet { get; set; }

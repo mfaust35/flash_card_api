@@ -13,7 +13,7 @@ namespace FlashCardApi.Models
         {
             if (reader.TryGetInt64(out long timestampInMilliseconds))
             {
-                DateTime result = Epoch().AddMilliseconds(timestampInMilliseconds);
+                DateTime result = DateTime.UnixEpoch.AddMilliseconds(timestampInMilliseconds);
                 return result;
             }
 
@@ -22,18 +22,10 @@ namespace FlashCardApi.Models
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
         {
-            TimeSpan timeSpan = value.ToUniversalTime() - Epoch();
+            TimeSpan timeSpan = value.ToUniversalTime() - DateTime.UnixEpoch;
             double timestampInMilliseconds = timeSpan.TotalMilliseconds;
 
             writer.WriteNumberValue(timestampInMilliseconds);
-        }
-
-        /**
-         * Epoch time is January 1st 1970 UTC.
-         */
-        private DateTime Epoch()
-        {
-            return new DateTime(1970, 1, 1).ToUniversalTime();
         }
     }
 }

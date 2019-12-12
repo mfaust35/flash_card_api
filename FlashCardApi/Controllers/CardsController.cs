@@ -22,7 +22,6 @@ namespace FlashCardApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Card>>> GetCards()
         {
-            //return await _context.Cards.Include(c => c.Booklet).ToListAsync();
             return await _context.Cards.ToListAsync();
         }
 
@@ -30,7 +29,6 @@ namespace FlashCardApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Card>> GetCard(long id)
         {
-            //var card = await _context.Cards.Include(c => c.Booklet).FirstOrDefaultAsync(b => b.BookletId == id);
             var card = await _context.Cards.FindAsync(id);
 
             if (card == null)
@@ -39,38 +37,6 @@ namespace FlashCardApi.Controllers
             }
 
             return card;
-        }
-
-        // PUT: api/cards/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCard(long id, Card card)
-        {
-            if (id != card.CardId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(card).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CardExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
         }
 
         // POST: api/cards
